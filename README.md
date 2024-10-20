@@ -48,7 +48,17 @@ python3 scripts/create_run_all_for_pursuit.py --device cuda:0
 
 The above code saves SAE activations and other info in BASE_DIR that will now be loadable into an SAEInfoObject. This is a convenient interface for performing many types of analysis on SAEs, and so we include a tutorial for how to use it in sae_info_object_tutorial.py. 
 
-## 
+## Reproducing Figures
+
+For reproducing Figure 1, Figure 2, Figure 3, Figure 4, Figure 5, Figure 6, Figure 10a, Figure 11, and Figure 12, run
+```
+python3 sae_power_laws.py --device cuda:0 --to_plot both
+python3 sae_power_laws.py --device cuda:0 --to_plot pursuit
+python3 sae_power_laws_per_token.py --device cuda:0
+```
+
+
+Plots will be saved to the plots/ directory.
 
 ## Contact
 

@@ -1,3 +1,5 @@
+<img width="1142" alt="Screenshot 2024-10-19 at 11 38 52 PM" src="https://github.com/user-attachments/assets/a1a07462-f6e4-4aa6-b35a-6f2a1a40af3d">
+
 # Decomposing the Dark Matter of Sparse Autoencoders
 This is the github repo for our paper "Decomposing the Dark Matter of Sparse Autoencoders".
 

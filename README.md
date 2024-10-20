@@ -114,6 +114,15 @@ To generate Figure 13, run
 python3 compare_norm_prediction_to_baselines.py
 ```
 
+To generate Figure 14, run
+```
+python3 latent_activations_vs_probe_sim.py
+```
+
+To generate Figure 15 and Table 1, run
+```
+python3 synthetic_simulation.py
+```
 
 ## Contact
 

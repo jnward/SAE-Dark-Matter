@@ -343,3 +343,7 @@ def create_equal_length_bucket_encoding(x, num_buckets, buckets_to_use=None):
     # one_hot *= x[:, None]
     
     return one_hot
+
+
+def fraction_variance_unexplained(original, predicted):
+    return ((original - predicted)**2).sum() / ((original - original.mean(dim=0))**2).sum()

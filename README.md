@@ -36,11 +36,11 @@ python3 save_gemma_acts_and_loss.py --device cuda:0 --layer_type att --layers 19
 
 To generate and save sae information, run
 ```
-python3 scripts/create_run_all_for_gemma_single_layer.py
+python3 scripts/create_run_all_for_gemma_single_layer.py --num_gpus 1 --device_offset 0 
 ./scripts/run_all.sh
-python3 scripts/create_run_all_for_gemma_all_layers.py
+python3 scripts/create_run_all_for_gemma_all_layers.py --num_gpus 1 --device_offset 0
 ./scripts/run_all.sh
-python3 scripts/create_run_all_for_pursuit.py
+python3 scripts/create_run_all_for_pursuit.py --device cuda:0
 ./scripts/run_all.sh
 ```
 

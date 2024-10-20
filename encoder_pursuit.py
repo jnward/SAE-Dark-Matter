@@ -9,7 +9,7 @@ import einops
 from utils import BASE_DIR
 import os
 
-os.makedirs(f"{BASE_DIR}/grad_pursuit", exist_ok=True)
+os.makedirs(f"{BASE_DIR}/data", exist_ok=True)
 
 torch.set_grad_enabled(False)
 
@@ -141,9 +141,9 @@ def run_grad_pursuit_and_save_recons(dictionary_sae, sae_info, batch_size=1):
         bar.set_description(f"{total_mse_grad_pursuit / (i + 1) / batch_size:.2f}")
 
         if save_incremental and i % 100 == 0:
-            torch.save(torch.concat(pursuit_reconstructions), f"{BASE_DIR}/grad_pursuit/grad_pursuit_reconstructions_{original_sae_name_no_slashes}-{dict_sae_name_no_slashes}_incremental.pt")
+            torch.save(torch.concat(pursuit_reconstructions), f"{BASE_DIR}/data/grad_pursuit_reconstructions_{original_sae_name_no_slashes}-{dict_sae_name_no_slashes}_incremental.pt")
 
     pursuit_reconstructions = torch.concat(pursuit_reconstructions)
-    torch.save(pursuit_reconstructions, f"{BASE_DIR}/grad_pursuit/grad_pursuit_reconstructions_{original_sae_name_no_slashes}-{dict_sae_name_no_slashes}.pt")
+    torch.save(pursuit_reconstructions, f"{BASE_DIR}/data/grad_pursuit_reconstructions_{original_sae_name_no_slashes}-{dict_sae_name_no_slashes}.pt")
 
 run_grad_pursuit_and_save_recons(dictionary_sae, sae_info, batch_size=batch_size)

@@ -1,5 +1,6 @@
 import pickle
 import os
+import argparse
 
 # Add parent dir to path
 this_dir = os.path.dirname(os.path.abspath(__file__))
@@ -11,7 +12,12 @@ from utils import get_gemma_sae_params_for_layer, get_l0_closest_to
 
 gemma_saes = get_gemma_sae_params_for_layer(layer=20, model="gemma_2_9b")
 
-device = "cuda:0"
+argparser = argparse.ArgumentParser()
+argparser.add_argument("--device", type=str, default="cuda:0")
+args = argparser.parse_args()
+
+num_gpus = args.num_gpus
+gpu_offset = args.gpu_offset
 
 target_l0 = 60
 with open("scripts/run_all.sh", "w") as f:

@@ -1,6 +1,6 @@
 # %%
 import pickle
-
+import argparse
 
 layer = 20
 
@@ -8,9 +8,13 @@ layer_type = "att"
 
 gemma_dict = pickle.load(open(f"gemma_sae_pickles/gemma_sae_dict_9b_{layer_type}.pkl", "rb"))
 
-num_gpus = 1
+argparser = argparse.ArgumentParser()
+argparser.add_argument("--num_gpus", type=int, default=1)
+argparser.add_argument("--gpu_offset", type=int, default=0)
+args = argparser.parse_args()
 
-gpu_offset = 1
+num_gpus = args.num_gpus
+gpu_offset = args.gpu_offset
 
 hyperparams = gemma_dict[layer]
 

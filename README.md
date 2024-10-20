@@ -59,11 +59,18 @@ The above code saves SAE activations and other info in BASE_DIR that will now be
 
 ## Reproducing Figures
 
+All plots will be saved to the plots/ directory.
+
 To generate Figure 1, Figure 2, Figure 3, Figure 4, Figure 5, Figure 6, Figure 10a, Figure 11, and Figure 12, run
 ```
 python3 sae_power_laws.py --device cuda:0 --to_plot both
 python3 sae_power_laws.py --device cuda:0 --to_plot pursuit
 python3 sae_power_laws_per_token.py --device cuda:0
+```
+
+To generate Figure 7, run
+```
+python3 norm_prediction_violin.py --device cuda:0
 ```
 
 To generate Figure 9, run
@@ -77,7 +84,6 @@ To generate Figure 10b, run
 ```
 python3 simple_circuits.py
 ```
-
 
 Generating Figure 8 is more involved. First, train SAEs on each component of the error:
 ```
@@ -103,8 +109,11 @@ Finally, to generate the plot, run
 python3 compare_dictionaries.py
 ```
 
+To generate Figure 13, run
+```
+python3 compare_norm_prediction_to_baselines.py
+```
 
-Plots will be saved to the plots/ directory.
 
 ## Contact
 

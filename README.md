@@ -1,5 +1,3 @@
-<img width="1853" alt="GPT-2 Auto-Discovered Multi-Dimensional Features" src="https://github.com/JoshEngels/MultiDimensionalFeatures/assets/15754392/cbe67ac3-feed-41a2-b31f-2a75406030da">
-
 # Decomposing the Dark Matter of Sparse Autoencoders
 This is the github repo for our paper "Decomposing the Dark Matter of Sparse Autoencoders".
 
@@ -11,14 +9,23 @@ We also include instructions for generating and using SAEInfoObjects, a simple y
 
 The required python packages to run this repo are
 ```
-transformer_lens sae_lens transformers datasets torch
+transformer_lens sae_lens transformers datasets torch nnsight aiofiles openai
 ```
 We recommend you create a new python venv named e.g. darkmatter and install these packages manually using pip:
 ```
 python -m venv darkmatter
 source darkmatter/bin/activate
-pip install transformer_lens sae_lens transformers datasets torch
+pip install transformer_lens sae_lens transformers datasets torch nnsight aiofiles openai
 ```
+
+To run auto interp experiments, you will also need to run
+```
+git submodule update --init --recursive
+cd sae-auto-interp
+pip install -e .
+```
+to get the required auto interp submodule.
+
 Let us know if anything does not work with this environment!
 
 You will also need to add a directory to BASE_DIR in utils.py that can store a few hundred GB of data, as this will store model and SAE activations and info (see the next section).
@@ -56,6 +63,13 @@ python3 sae_power_laws.py --device cuda:0 --to_plot both
 python3 sae_power_laws.py --device cuda:0 --to_plot pursuit
 python3 sae_power_laws_per_token.py --device cuda:0
 ```
+
+Generating Figure 8 is more involved. First, train SAEs on each component of the error:
+```
+python3 train_on_error.py --device cuda:0 --train_on linear_prediction_of_error
+python3 train_on_error.py --device cuda:0 --train_on nonlinear_error
+```
+Then, 
 
 
 Plots will be saved to the plots/ directory.

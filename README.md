@@ -57,11 +57,16 @@ The above code saves SAE activations and other info in BASE_DIR that will now be
 
 ## Reproducing Figures
 
-For reproducing Figure 1, Figure 2, Figure 3, Figure 4, Figure 5, Figure 6, Figure 10a, Figure 11, and Figure 12, run
+To generate Figure 1, Figure 2, Figure 3, Figure 4, Figure 5, Figure 6, Figure 10a, Figure 11, and Figure 12, run
 ```
 python3 sae_power_laws.py --device cuda:0 --to_plot both
 python3 sae_power_laws.py --device cuda:0 --to_plot pursuit
 python3 sae_power_laws_per_token.py --device cuda:0
+```
+
+To generate Figure 10b, run
+```
+python3 simple_circuits.py
 ```
 
 Generating Figure 8 is more involved. First, train SAEs on each component of the error:
@@ -69,7 +74,24 @@ Generating Figure 8 is more involved. First, train SAEs on each component of the
 python3 train_on_error.py --device cuda:0 --train_on linear_prediction_of_error
 python3 train_on_error.py --device cuda:0 --train_on nonlinear_error
 ```
-Then, 
+Then, cache SAE activations by running
+```
+python3 feature_evals.py --to_do generate --sae_type linear
+python3 feature_evals.py --to_do generate --sae_type nonlinear
+```
+You will then need to run llama 70b using vllm in a seperate terminal (you can also modify feature_evals.py to use OpenRouter instead if you would like):
+```
+vllm serve hugging-quants/Meta-Llama-3.1-70B-Instruct-AWQ-INT4 --max_model_len 10000 --tensor-parallel-size 
+```
+And then you can run the feature analysis by running
+```
+python3 feature_evals.py --to_do eval --sae_type linear
+python3 feature_evals.py --to_do eval --sae_type nonlinear
+```
+Finally, to generate the plot, run
+```
+python3 compare_dictionaries.py
+```
 
 
 Plots will be saved to the plots/ directory.

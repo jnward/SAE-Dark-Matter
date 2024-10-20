@@ -66,10 +66,18 @@ python3 sae_power_laws.py --device cuda:0 --to_plot pursuit
 python3 sae_power_laws_per_token.py --device cuda:0
 ```
 
+To generate Figure 9, run
+```
+python3 downstream_ce --device cuda:0 --loop_setting width
+python3 downstream_ce --device cuda:0 --loop_setting l0
+python3 plot_downstream_ce.py
+```
+
 To generate Figure 10b, run
 ```
 python3 simple_circuits.py
 ```
+
 
 Generating Figure 8 is more involved. First, train SAEs on each component of the error:
 ```

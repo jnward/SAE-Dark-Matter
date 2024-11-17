@@ -15,14 +15,13 @@ torch.set_grad_enabled(False)
 
 # %%
 
-size = "2b"
-
 argparser = argparse.ArgumentParser()
 argparser.add_argument("--layer", type=int, default=20)
 argparser.add_argument("--width", type=str, default="131k")
 argparser.add_argument("--base_l0", type=int, default=114)
 argparser.add_argument("--device", type=str, default="cuda:0")
 argparser.add_argument("--save_incremental", action="store_true")
+argparser.add_argument("--size", type=str, default="9b")
 argparser.add_argument("--batch_size", type=int, default=256)
 
 args = argparser.parse_args()
@@ -37,7 +36,7 @@ sae_name = f"layer_{layer}/width_{width}/average_l0_{l0}"
 dictionary_sae = SAE.from_pretrained(
     release=f"gemma-scope-{size}-pt-res",
     sae_id=sae_name,
-    device="cpu",
+    device=device,
 )[0] 
 
 sae_info = get_sae_info(layer=layer, sae_name=sae_name, model=f"gemma_2_{size}")

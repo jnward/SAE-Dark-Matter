@@ -4,7 +4,7 @@ import argparse
 
 layer = 20
 
-size = "2b"
+size = "9b"
 
 layer_type = "res"
 

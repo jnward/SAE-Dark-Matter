@@ -46,13 +46,16 @@ else:
 
 # %%
 
-size = "2b"
+size = "9b"
+
+print(f"Defice: {device}")
 
 model = transformer_lens.HookedTransformer.from_pretrained(
     f"google/gemma-2-{size}",
     center_writing_weights=False,
     center_unembed=False,
     device=device,
+    # dtype=torch.bfloat16
 )
 
 
@@ -135,18 +138,18 @@ all_tokens = []
 
 
 def save_so_far():
-    all_model_losses_cat = torch.cat(all_model_losses, dim=0)
-    all_tokens_cat = torch.cat(all_tokens, dim=0)
+    all_model_losses_cat = torch.cat(all_model_losses, dim=0).float()
+    all_tokens_cat = torch.cat(all_tokens, dim=0).float()
     torch.save(all_model_losses_cat, os.path.join(save_dir_base, "model_losses.pt"))
     torch.save(all_tokens_cat, os.path.join(save_dir_base, "tokens.pt"))
 
     for layer, layer_acts in zip(layers, all_acts):
-        layer_acts_cat = torch.cat(layer_acts, dim=0)
+        layer_acts_cat = torch.cat(layer_acts, dim=0).float()
         # torch.save(layer_acts_cat, os.path.join(save_dir_base, f"acts_layer_{layer}.pt"))
         layer_acts_cat.numpy().tofile(os.path.join(save_dir_base, f"acts_layer_{layer}.npy"))
 
     for layer, layer_act_norms in zip(layers, all_act_norms):
-        layer_act_norms_cat = torch.cat(layer_act_norms, dim=0)
+        layer_act_norms_cat = torch.cat(layer_act_norms, dim=0).float()
         torch.save(layer_act_norms_cat, os.path.join(save_dir_base, f"act_norms_layer_{layer}.pt"))
 
 

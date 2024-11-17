@@ -48,8 +48,6 @@ else:
 
 size = "9b"
 
-print(f"Defice: {device}")
-
 model = transformer_lens.HookedTransformer.from_pretrained(
     f"google/gemma-2-{size}",
     center_writing_weights=False,

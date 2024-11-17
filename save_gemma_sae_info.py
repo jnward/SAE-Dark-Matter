@@ -63,6 +63,9 @@ sae, cfg_dict, sparsity = SAE.from_pretrained(
     sae_id=sae_name,
     device=device,
 )
+
+sae = sae.to(torch.bfloat16)
+
 hook_name = sae.cfg.hook_name
 print(hook_name)
 
@@ -88,13 +91,13 @@ all_sae_features_acts = []
 
 
 def save_so_far():
-    all_sae_l0s_cat = torch.cat(all_sae_l0s, dim=0)
+    all_sae_l0s_cat = torch.cat(all_sae_l0s, dim=0).float()
     torch.save(all_sae_l0s_cat, f"{save_dir}/sae_l0s_layer_{layer}.pt")
-    all_sae_errors_cat = torch.cat(all_sae_errors, dim=0)
+    all_sae_errors_cat = torch.cat(all_sae_errors, dim=0).float()
     torch.save(all_sae_errors_cat, f"{save_dir}/sae_errors_layer_{layer}.pt")
-    all_sae_error_vecs_cat = torch.cat(all_sae_error_vecs, dim=0)
+    all_sae_error_vecs_cat = torch.cat(all_sae_error_vecs, dim=0).float()
     all_sae_error_vecs_cat.numpy().tofile(f"{save_dir}/sae_error_vecs_layer_{layer}.npy")
-    all_feature_act_norms_cat = torch.cat(all_feature_act_norms, dim=0)
+    all_feature_act_norms_cat = torch.cat(all_feature_act_norms, dim=0).float()
     torch.save(
         all_feature_act_norms_cat, f"{save_dir}/feature_act_norms_layer_{layer}.pt"
     )

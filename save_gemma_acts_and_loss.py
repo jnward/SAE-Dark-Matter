@@ -48,12 +48,13 @@ else:
 
 size = "9b"
 
-model = transformer_lens.HookedTransformer.from_pretrained(
+# model = transformer_lens.HookedTransformer.from_pretrained(
+model = transformer_lens.HookedTransformer.from_pretrained_no_processing(
     f"google/gemma-2-{size}",
     center_writing_weights=False,
     center_unembed=False,
     device=device,
-    # dtype=torch.bfloat16
+    dtype=torch.bfloat16
 )
 
 

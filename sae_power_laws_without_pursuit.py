@@ -27,7 +27,7 @@ args = argparser.parse_args()
 device = args.device
 to_plot = args.to_plot
 layer = 20
-size = "2b"
+size = "9b"
 
 
 # %%
@@ -110,10 +110,7 @@ print("Target L0:", target_l0)
 # fvus_with_preds_to_plot_grad_pursuit = []
 
 all_sae_params = get_gemma_sae_params_for_layer(20, model=f"gemma_2_{size}")
-acts = get_sae_info_by_params(20, "16k", min(all_sae_params["16k"]), model=f"gemma_2_{size}").acts_flattened
-
-sae_widths = ["16k", "32k", "65k", "131k", "262k", "524k", "1m"]
-sae_widths = ["16k", "65k"]
+# acts = get_sae_info_by_params(20, "16k", min(all_sae_params["16k"]), model=f"gemma_2_{size}").acts_flattened
 
 # for width in sae_widths:
 #     print(width)
@@ -171,9 +168,10 @@ else:
     ylabel = "FVU"
 
 # %%
-
-sae_widths = ["16k", "32k", "65k", "131k", "262k", "524k", "1m"]
-sae_widths = ["16k", "65k"]
+if size == "9b":
+    sae_widths = ["16k", "32k", "65k", "131k", "262k", "524k"]#, "1m"]
+else:  # 2b
+    sae_widths = ["16k", "65k"]
 
 # Sort saes
 correct_order_saes = []
@@ -202,8 +200,11 @@ sae_error_vec_r_squareds = correct_order_sae_error_vec_r_squareds
 
 # %%
 
-widths = [2**14, 2**15, 2**16, 2**17, 2**18, 2**19, 2**20]
-widths = [2**14, 2**16]
+if size == "9b":
+    widths = [2**14, 2**15, 2**16, 2**17, 2**18, 2**19]#, 2**20]
+else:
+    widths = [2**14, 2**16]
+
 all_widths = []
 all_losses_with_preds = []
 all_l0s = []
@@ -350,8 +351,6 @@ plt.savefig(f"plots/sae_power_law_fit_{target_l0}.pdf", bbox_inches='tight', pad
 
 # %%
 
-widths = [2**14, 2**15, 2**16, 2**17, 2**18, 2**19, 2**20]
-widths = [2**14, 2**16]
 all_zs = [sae_error_norm_r_squareds, sae_error_vec_r_squareds]
 labels = ["norm", "vec"]
 
@@ -523,8 +522,10 @@ if plot_log:
 else:
     average_func = lambda x, y: (x + y) / 2 - 0.003
 
-main_fontsize = 10 if to_plot == "both" else 7  # TODO v why was this [3] originally?
-ax.text(20_000, average_func(c, losses_l0_60[1]), 'Absent Features', fontsize=main_fontsize, ha='left', va='center')
+magic_index = 3 if size == "9b" else 1
+
+main_fontsize = 10 if to_plot == "both" else 7
+ax.text(20_000, average_func(c, losses_l0_60[magic_index]), 'Absent Features', fontsize=main_fontsize, ha='left', va='center')
 ax.text(20_000, average_func(c, average), 'Linear Error', fontsize=main_fontsize, ha='left', va='center')
 ax.text(20_000, average_func(y_min, average) - 0.01, 'Nonlinear Error', fontsize=main_fontsize, ha='left', va='center')
 

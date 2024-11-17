@@ -352,7 +352,6 @@ plt.savefig(f"plots/sae_power_law_fit_{target_l0}.pdf", bbox_inches='tight', pad
 
 # %%
 
-widths = [2**14, 2**15, 2**16, 2**17, 2**18, 2**19, 2**20]
 all_zs = [sae_error_norm_r_squareds, sae_error_vec_r_squareds]
 labels = ["norm", "vec"]
 

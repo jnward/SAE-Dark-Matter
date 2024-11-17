@@ -15,7 +15,7 @@ torch.set_grad_enabled(False)
 
 # %%
 
-size = "9b"
+size = "2b"
 
 argparser = argparse.ArgumentParser()
 argparser.add_argument("--layer", type=int, default=20)
@@ -40,7 +40,7 @@ dictionary_sae = SAE.from_pretrained(
     device="cpu",
 )[0] 
 
-sae_info = get_sae_info(layer=layer, sae_name=sae_name, model="gemma_2_9b")
+sae_info = get_sae_info(layer=layer, sae_name=sae_name, model=f"gemma_2_{size}")
 
 # %%
 

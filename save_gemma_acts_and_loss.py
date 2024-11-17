@@ -41,12 +41,12 @@ if not is_notebook:
 else:
 
     device = "cuda:0"
-    layers = range(41)
+    layers = [20]
     layer_type = "res"
 
 # %%
 
-size = "9b"
+size = "2b"
 
 model = transformer_lens.HookedTransformer.from_pretrained(
     f"google/gemma-2-{size}",

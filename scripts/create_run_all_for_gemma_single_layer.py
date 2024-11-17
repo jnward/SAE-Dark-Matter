@@ -4,9 +4,11 @@ import argparse
 
 layer = 20
 
-layer_type = "att"
+size = "2b"
 
-gemma_dict = pickle.load(open(f"gemma_sae_pickles/gemma_sae_dict_9b_{layer_type}.pkl", "rb"))
+layer_type = "res"
+
+gemma_dict = pickle.load(open(f"gemma_sae_pickles/gemma_sae_dict_{size}_{layer_type}.pkl", "rb"))
 
 argparser = argparse.ArgumentParser()
 argparser.add_argument("--num_gpus", type=int, default=1)
@@ -31,7 +33,7 @@ hyperparams = [x for _, x in sorted(zip(values, hyperparams))]
 commands = []
 for width, l0 in hyperparams:
     commands.append(
-        f"python save_info_gemma.py --layer {layer} --sae_width {width} --sae_l0 {l0} --size 9b --layer_type {layer_type}"
+        f"python save_gemma_sae_info.py --layer {layer} --sae_width {width} --sae_l0 {l0} --size {size} --layer_type {layer_type}"
     )
 
 with open("scripts/run_all.sh", "w") as f:

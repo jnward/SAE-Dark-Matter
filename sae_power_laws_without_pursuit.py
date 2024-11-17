@@ -104,43 +104,41 @@ off_by_limit = 0.2
 target_l0 = 60
 print("Target L0:", target_l0)
 
-normalized_mses_to_plot_grad_pursuit = []
-normalized_mse_with_preds_to_plot_grad_pursuit = []
-fvus_to_plot_grad_pursuit = []
-fvus_with_preds_to_plot_grad_pursuit = []
+# normalized_mses_to_plot_grad_pursuit = []
+# normalized_mse_with_preds_to_plot_grad_pursuit = []
+# fvus_to_plot_grad_pursuit = []
+# fvus_with_preds_to_plot_grad_pursuit = []
 
 all_sae_params = get_gemma_sae_params_for_layer(20, model=f"gemma_2_{size}")
 acts = get_sae_info_by_params(20, "16k", min(all_sae_params["16k"]), model=f"gemma_2_{size}").acts_flattened
 
-if size == "9b":
-    sae_widths = ["16k", "32k", "65k", "131k", "262k", "524k", "1m"]
-else:  # 2b
-    sae_widths = ["16k", "65k"]
+sae_widths = ["16k", "32k", "65k", "131k", "262k", "524k", "1m"]
+sae_widths = ["16k", "65k"]
 
-for width in sae_widths:
-    print(width)
-    l0s = all_sae_params[width]
-    closest_l0 = get_l0_closest_to(l0s, target_l0)
-    sae_name_no_slashes = f"layer_20_width_{width}_average_l0_{closest_l0}"
-    acts_gpu = acts.to(device)
-    path = f"{BASE_DIR}/data/grad_pursuit_reconstructions_{sae_name_no_slashes}-{sae_name_no_slashes}.pt"
-    if os.path.exists(path):
-        recons = torch.load(path).to(device)
-    else:
-        raise ValueError("File not found")
+# for width in sae_widths:
+#     print(width)
+#     l0s = all_sae_params[width]
+#     closest_l0 = get_l0_closest_to(l0s, target_l0)
+#     sae_name_no_slashes = f"layer_20_width_{width}_average_l0_{closest_l0}"
+#     acts_gpu = acts.to(device)
+#     path = f"{BASE_DIR}/data/grad_pursuit_reconstructions_{sae_name_no_slashes}-{sae_name_no_slashes}.pt"
+#     if os.path.exists(path):
+#         recons = torch.load(path).to(device)
+#     else:
+#         raise ValueError("File not found")
 
-    normalized_mses_to_plot_grad_pursuit.append(normalized_mse(recons, acts_gpu).item())
-    fvus_to_plot_grad_pursuit.append(fraction_variance_unexplained(acts_gpu, recons).item())
+#     normalized_mses_to_plot_grad_pursuit.append(normalized_mse(recons, acts_gpu).item())
+#     fvus_to_plot_grad_pursuit.append(fraction_variance_unexplained(acts_gpu, recons).item())
 
-    x_gpu = acts_gpu
-    y_gpu = acts.to(device) - recons
-    predictions = x_gpu @ run_lstsq(x_gpu, y_gpu, device=device)[2].to(device)
+#     x_gpu = acts_gpu
+#     y_gpu = acts.to(device) - recons
+#     predictions = x_gpu @ run_lstsq(x_gpu, y_gpu, device=device)[2].to(device)
 
-    normalized_mse_with_preds_to_plot_grad_pursuit.append(normalized_mse(recons + predictions, acts_gpu).item())
-    fvus_with_preds_to_plot_grad_pursuit.append(fraction_variance_unexplained(acts_gpu, recons + predictions).item())
+#     normalized_mse_with_preds_to_plot_grad_pursuit.append(normalized_mse(recons + predictions, acts_gpu).item())
+#     fvus_with_preds_to_plot_grad_pursuit.append(fraction_variance_unexplained(acts_gpu, recons + predictions).item())
 
-with open(f"{BASE_DIR}/data/grad_pursuit_mses_{size}.pkl", "wb") as f:
-    pickle.dump((normalized_mses_to_plot_grad_pursuit, normalized_mse_with_preds_to_plot_grad_pursuit, fvus_to_plot_grad_pursuit, fvus_with_preds_to_plot_grad_pursuit), f)
+# with open(f"{BASE_DIR}/data/grad_pursuit_mses_{size}.pkl", "wb") as f:
+#     pickle.dump((normalized_mses_to_plot_grad_pursuit, normalized_mse_with_preds_to_plot_grad_pursuit, fvus_to_plot_grad_pursuit, fvus_with_preds_to_plot_grad_pursuit), f)
 
 
 
@@ -148,8 +146,8 @@ with open(f"{BASE_DIR}/data/grad_pursuit_mses_{size}.pkl", "wb") as f:
 
 # ------------------- MAKE PLOTS -------------------
 
-with open(f"{BASE_DIR}/data/grad_pursuit_mses_{size}.pkl", "rb") as f:
-    normalized_mses_to_plot_grad_pursuit, normalized_mse_with_preds_to_plot_grad_pursuit, fvus_to_plot_grad_pursuit, fvus_with_preds_to_plot_grad_pursuit = pickle.load(f)
+# with open(f"{BASE_DIR}/data/grad_pursuit_mses_{size}.pkl", "rb") as f:
+#     normalized_mses_to_plot_grad_pursuit, normalized_mse_with_preds_to_plot_grad_pursuit, fvus_to_plot_grad_pursuit, fvus_with_preds_to_plot_grad_pursuit = pickle.load(f)
 
 with open(f"{BASE_DIR}/data/sae_power_laws_{size}.pkl", "rb") as f:
     saes, normalized_mses, normalized_mses_with_predictions, fvus, fvus_with_predictions, empirical_l0s, sae_error_norm_r_squareds, sae_error_vec_r_squareds = pickle.load(f)
@@ -162,17 +160,20 @@ plot_type = "fvu"
 if plot_type == "mse":
     losses = normalized_mses
     losses_with_preds = normalized_mses_with_predictions
-    losses_grad_pursuit = normalized_mses_to_plot_grad_pursuit
-    losses_grad_pursuit_with_preds = normalized_mse_with_preds_to_plot_grad_pursuit
+    # losses_grad_pursuit = normalized_mses_to_plot_grad_pursuit
+    # losses_grad_pursuit_with_preds = normalized_mse_with_preds_to_plot_grad_pursuit
     ylabel = "Normalized MSE"
 else:
     losses = fvus
     losses_with_preds = fvus_with_predictions
-    losses_grad_pursuit = fvus_to_plot_grad_pursuit
-    losses_grad_pursuit_with_preds = fvus_with_preds_to_plot_grad_pursuit
+    # losses_grad_pursuit = fvus_to_plot_grad_pursuit
+    # losses_grad_pursuit_with_preds = fvus_with_preds_to_plot_grad_pursuit
     ylabel = "FVU"
 
 # %%
+
+sae_widths = ["16k", "32k", "65k", "131k", "262k", "524k", "1m"]
+sae_widths = ["16k", "65k"]
 
 # Sort saes
 correct_order_saes = []
@@ -201,11 +202,8 @@ sae_error_vec_r_squareds = correct_order_sae_error_vec_r_squareds
 
 # %%
 
-if size == "9b":
-    widths = [2**14, 2**15, 2**16, 2**17, 2**18, 2**19, 2**20]
-else:
-    widths = [2**14, 2**16]
-
+widths = [2**14, 2**15, 2**16, 2**17, 2**18, 2**19, 2**20]
+widths = [2**14, 2**16]
 all_widths = []
 all_losses_with_preds = []
 all_l0s = []
@@ -269,9 +267,9 @@ for i, (width, l0s, losses_for_width, losses_with_preds_for_width) in enumerate(
 # %%
 
 
-if to_plot == "pursuit":
-    losses_l0_60 = losses_grad_pursuit
-    losses_l0_60_with_preds = losses_grad_pursuit_with_preds
+# if to_plot == "pursuit":
+#     losses_l0_60 = losses_grad_pursuit
+#     losses_l0_60_with_preds = losses_grad_pursuit_with_preds
 
 torch.set_grad_enabled(True)
 
@@ -353,6 +351,7 @@ plt.savefig(f"plots/sae_power_law_fit_{target_l0}.pdf", bbox_inches='tight', pad
 # %%
 
 widths = [2**14, 2**15, 2**16, 2**17, 2**18, 2**19, 2**20]
+widths = [2**14, 2**16]
 all_zs = [sae_error_norm_r_squareds, sae_error_vec_r_squareds]
 labels = ["norm", "vec"]
 
@@ -479,8 +478,8 @@ ax.plot(widths, losses_l0_60_with_preds, "o", color=colors[1], markersize=3)
 ax.plot([x_min, x_max], [c, c], color=colors[0], linestyle=':', linewidth=1.3)
 
 # Decoder/Sparsity Error, pursuit
-if to_plot == "both":
-    ax.plot(widths, losses_grad_pursuit_with_preds, "o", color=colors[2], markersize=3)
+# if to_plot == "both":
+#     ax.plot(widths, losses_grad_pursuit_with_preds, "o", color=colors[2], markersize=3)
 
 # Extend x for fill_between
 x_extended = np.logspace(np.log10(x_min), np.log10(x_max), 1000)
@@ -493,15 +492,16 @@ if to_plot == "both":
     def piecewise_encoder_boundary(x):
         # Find the last x value where we have actual data
         last_data_x = widths[-1]
-        last_data_y = losses_grad_pursuit_with_preds[-1]
+        return last_data_x
+        # # last_data_y = losses_grad_pursuit_with_preds[-1]
         
-        # Create a piecewise function
-        if x <= last_data_x:
-            # Interpolate between known points for x values within data range
-            return np.interp(x, widths, losses_grad_pursuit_with_preds)
-        else:
-            # Use the last known y value for x values beyond data range
-            return last_data_y
+        # # Create a piecewise function
+        # if x <= last_data_x:
+        #     # Interpolate between known points for x values within data range
+        #     return np.interp(x, widths, losses_grad_pursuit_with_preds)
+        # else:
+        #     # Use the last known y value for x values beyond data range
+        #     return last_data_y
 
     encoder_boundary = np.vectorize(piecewise_encoder_boundary)(x_extended)
 
@@ -523,11 +523,8 @@ if plot_log:
 else:
     average_func = lambda x, y: (x + y) / 2 - 0.003
 
-main_fontsize = 10 if to_plot == "both" else 7
-
-magic_index = 3 if size == "9b" else 1
-
-ax.text(20_000, average_func(c, losses_l0_60[magic_index]), 'Absent Features', fontsize=main_fontsize, ha='left', va='center')
+main_fontsize = 10 if to_plot == "both" else 7  # TODO v why was this [3] originally?
+ax.text(20_000, average_func(c, losses_l0_60[1]), 'Absent Features', fontsize=main_fontsize, ha='left', va='center')
 ax.text(20_000, average_func(c, average), 'Linear Error', fontsize=main_fontsize, ha='left', va='center')
 ax.text(20_000, average_func(y_min, average) - 0.01, 'Nonlinear Error', fontsize=main_fontsize, ha='left', va='center')
 

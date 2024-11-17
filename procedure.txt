@@ -1,0 +1,8 @@
+1. install dependencies
+2. run save_gemma_acts_and_loss.py
+3. run create_run_all_for_gemma_single_layer.py (specify layer)
+4. remove unwanted SAEs from run_all.sh (TODO: modify above py file to do this)
+5. run run_all.sh
+6. optional: do above for gradient pursuit
+7. or: run sae_power_laws_without_pursuit.py to generate vis
+8. run sae_power_laws to generate vis (TODO: modify calculation of `acts` to not require lower l0 sae (easy))

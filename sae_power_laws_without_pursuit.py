@@ -21,7 +21,7 @@ torch.set_grad_enabled(False)
 
 argparser = argparse.ArgumentParser()
 argparser.add_argument("--device", type=str, default="cuda:0")
-argparser.add_argument("--to_plot", choices=["both", "pursuit"], default="both")
+argparser.add_argument("--to_plot", choices=["both", "pursuit"], default="pursuit")
 args = argparser.parse_args()
 
 device = args.device
@@ -538,8 +538,8 @@ custom_lines = [Line2D([0], [0], color=colors[0], marker='o', linestyle='None', 
 
 if to_plot == "pursuit":
     ax.legend(custom_lines, 
-            [f'Pursuit SAE Reconstruction, ${{{ylabel}}} \\approx {{{c:.3f}}} + {{{a:.3f}}} W^{{{m:.3f}}}$',
-            f'Pursuit SAE Reconstruction + Error Prediction, ${{{ylabel}}} \\approx {{{average:.3f}}}$'],
+            [f'SAE Reconstruction, ${{{ylabel}}} \\approx {{{c:.3f}}} + {{{a:.3f}}} W^{{{m:.3f}}}$',
+            f'SAE Reconstruction + Error Prediction, ${{{ylabel}}} \\approx {{{average:.3f}}}$'],
             fontsize=6, ncol=1, bbox_to_anchor=(-0.2, 1), loc='lower left')
 else:
     ax.legend(custom_lines, 
@@ -624,6 +624,6 @@ else:
 if to_plot == "both":
     plt.savefig("plots/scaling_filled_with_zoom_combined.pdf", bbox_inches='tight', pad_inches=0.02)
 else:
-    plt.savefig(f"plots/scaling_filled_{to_plot}.pdf", bbox_inches='tight', pad_inches=0.02)
+    plt.savefig(f"plots/scaling_filled.pdf", bbox_inches='tight', pad_inches=0.02)
 plt.show()
 # %%

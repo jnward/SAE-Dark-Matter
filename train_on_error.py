@@ -5,8 +5,8 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from sae_lens import SAE
 import einops
 
-from eleuther_sae_modified_encoder.sae import SaeConfig, SaeTrainer, TrainConfig
-from eleuther_sae_modified_encoder.sae.data import chunk_and_tokenize
+from eleuther_sae_modified.sae import SaeConfig, SaeTrainer, TrainConfig
+from eleuther_sae_modified.sae.data import chunk_and_tokenize
 import argparse
 from utils import get_sae_info, run_lstsq
 

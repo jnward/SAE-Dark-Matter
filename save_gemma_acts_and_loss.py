@@ -9,6 +9,8 @@ import argparse
 from utils import BASE_DIR
 
 torch.set_grad_enabled(False)
+os.environ["HF_TOKEN"] = "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"
+
 
 
 # %%
@@ -41,12 +43,12 @@ if not is_notebook:
 else:
 
     device = "cuda:0"
-    layers = [20]
+    layers = [12]
     layer_type = "res"
 
 # %%
 
-size = "9b"
+size = "2b"
 
 # model = transformer_lens.HookedTransformer.from_pretrained(
 model = transformer_lens.HookedTransformer.from_pretrained_no_processing(

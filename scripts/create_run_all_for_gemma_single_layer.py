@@ -2,9 +2,9 @@
 import pickle
 import argparse
 
-layer = 20
+layer = 12
 
-size = "9b"
+size = "2b"
 
 layer_type = "res"
 
